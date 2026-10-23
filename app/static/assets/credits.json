@@ -1,0 +1,38 @@
+[
+  {
+    "file": "luopan.webp",
+    "source": "Wikimedia Commons",
+    "title": "Feng shui geometric compass",
+    "creator": "Wellcome Collection",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Feng_shui_geometric_compass_Wellcome_L0045144.jpg",
+    "used": "命盘页与起卦说明中的器物照片，裁切、去色后叠在纸面上"
+  },
+  {
+    "file": "zhouyi-song.webp",
+    "source": "Wikimedia Commons",
+    "title": "I Ching Song Dynasty print",
+    "license": "Public domain",
+    "page": "https://commons.wikimedia.org/wiki/File:I_Ching_Song_Dynasty_print.jpg",
+    "used": "起卦说明中的宋刻本周易书页"
+  },
+  {
+    "file": "dunhuang-star.webp",
+    "source": "Wikimedia Commons",
+    "title": "Dunhuang star map",
+    "license": "Public domain",
+    "page": "https://commons.wikimedia.org/wiki/File:Dunhuang_star_map.jpg",
+    "used": "起卦说明中的敦煌星图"
+  },
+  {
+    "file": "mountains.jpg",
+    "source": "Wikimedia Commons",
+    "title": "南宋 米友仁 雲山圖 卷",
+    "creator": "Mi Youren",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:%E5%8D%97%E5%AE%8B_%E7%B1%B3%E5%8F%8B%E4%BB%81_%E9%9B%B2%E5%B1%B1%E5%9C%96_%E5%8D%B7.jpg",
+    "used": "天幕与页脚的墨山；去色、反相为夜色中的淡墨"
+  }
+]

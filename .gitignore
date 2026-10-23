@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__/
+*.pyc
+.taste-skill/
+每日一卦.app/
+dist/
+*.log
+data/narratives/*
+!data/narratives/.gitkeep
+data/profile.json

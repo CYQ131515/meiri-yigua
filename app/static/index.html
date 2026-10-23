@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>每日一卦 · 今日运势</title>
+<meta name="description" content="每日运势：以四柱八字、黄历与梅花易数起卦，看今天的卦气与六事。本地运行，可接入自己的 API。">
+<meta name="theme-color" content="#d9d1bf">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<a class="skip-link" href="#main">跳到正文</a>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="#today" data-view-link="today">
+      <span class="brand-mark" aria-hidden="true">卦</span>
+      <span class="brand-text">每日一卦</span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <button class="nav-btn is-active" type="button" data-view="today">今日</button>
+      <button class="nav-btn" type="button" data-view="chart">命盘</button>
+      <button class="nav-btn" type="button" data-view="settings" id="open-settings" aria-haspopup="dialog">设置</button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <!-- ============================================================ 今日 -->
+  <section class="view" id="view-today">
+    <section class="stage" id="stage">
+      <div class="stage-sky" aria-hidden="true">
+        <div class="stars" id="stars"></div>
+        <div class="stage-haze"></div>
+        <div class="stage-bloom"></div>
+        <img class="stage-mountains" src="assets/mountains.jpg" width="1600" height="810" alt="">
+      </div>
+
+      <div class="wrap stage-inner">
+        <aside class="stage-side stage-side-left" aria-hidden="true">
+          <span class="v-line" id="v-line-1">丙午年 九月十四</span>
+          <span class="v-seal">日课</span>
+        </aside>
+
+        <div class="stage-main">
+          <p class="stage-meta"><span id="date-greg">—</span><span class="sep">·</span><span id="date-week">—</span></p>
+          <h1 class="stage-title" id="hero-title">今日一卦</h1>
+          <p class="stage-lede" id="hero-lede">以年月日时起卦，看今天的卦气与六事。</p>
+
+          <figure class="stage-dial">
+            <div class="dial-shell" id="dial-shell">
+              <div class="stage-orbit" id="stage-orbit" aria-hidden="true"></div>
+              <svg id="dial" class="dial" viewBox="0 0 600 600" role="group" aria-label="八卦罗盘，可点击八卦查看卦象"></svg>
+            </div>
+            <figcaption class="dial-cap" id="dial-cap">罗盘 · 二十四山 · 后天八卦</figcaption>
+          </figure>
+
+          <div class="stage-action">
+            <button class="seal-btn" id="cast-btn" type="button">
+              <span>起</span><span>卦</span>
+            </button>
+            <a class="quiet-link" id="read-link" href="#reading" hidden>查看今日卦</a>
+          </div>
+          <p class="hero-status" id="hero-status" aria-live="polite"></p>
+
+          <dl class="today-facts" id="today-facts"></dl>
+        </div>
+
+        <aside class="stage-side stage-side-right" aria-hidden="true">
+          <span class="v-line" id="v-line-2">庚午日 成日</span>
+          <span class="v-seal">占</span>
+        </aside>
+      </div>
+
+      <div class="stage-edge" aria-hidden="true">
+        <svg viewBox="0 0 1440 92" preserveAspectRatio="none" focusable="false">
+          <path d="M0,60.0 L14,58.3 L28,58.7 L42,56.1 L56,54.7 L70,87.4 L84,57.5 L98,60.5 L112,58.6 L126,56.5 L140,57.4 L154,58.2 L168,62.0 L182,57.4 L196,89.3 L210,52.9 L224,56.5 L238,57.5 L252,56.2 L266,54.2 L280,58.7 L294,56.6 L308,57.3 L322,54.9 L336,57.7 L350,59.8 L364,55.2 L378,50.5 L392,54.0 L406,51.7 L420,55.4 L434,58.6 L448,61.2 L462,57.8 L476,57.9 L490,59.9 L504,59.9 L518,62.1 L532,62.9 L546,64.6 L560,62.8 L574,65.3 L588,63.3 L602,87.3 L616,60.6 L630,63.3 L644,59.8 L658,79.5 L672,61.4 L686,57.4 L700,52.8 L714,56.9 L728,60.0 L742,61.1 L756,63.2 L770,64.6 L784,65.6 L798,67.9 L812,81.1 L826,68.1 L840,69.6 L854,65.4 L868,61.8 L882,59.5 L896,62.3 L910,60.1 L924,59.6 L938,59.6 L952,59.7 L966,55.5 L980,59.0 L994,55.7 L1008,53.9 L1022,87.3 L1036,48.3 L1050,48.5 L1064,51.9 L1078,47.1 L1092,49.0 L1106,45.2 L1120,44.9 L1134,49.3 L1148,47.3 L1162,44.7 L1176,45.4 L1190,46.9 L1204,45.1 L1218,49.4 L1232,46.0 L1246,45.6 L1260,46.2 L1274,43.4 L1288,40.0 L1302,40.0 L1316,40.0 L1330,42.9 L1344,44.2 L1358,40.0 L1372,40.0 L1386,40.0 L1400,40.0 L1414,40.0 L1428,57.0 L1440,92 L0,92 Z" fill="var(--paper)"/>
+        </svg>
+      </div>
+    </section>
+
+    <section class="reading" id="reading" hidden aria-labelledby="reading-title">
+      <header class="reading-head">
+        <div class="wrap reading-head-inner">
+          <div class="hex-figure" id="hex-figure" aria-hidden="true"></div>
+          <div class="hex-title">
+            <h2 id="reading-title">—</h2>
+            <p class="hex-sub" id="hex-sub">—</p>
+          </div>
+          <div class="stamp" id="score-stamp" aria-label="综合运势">
+            <span class="stamp-score">—</span>
+            <span class="stamp-word">—</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="wrap reading-grid">
+        <div class="col-main">
+          <section class="block poem-block reveal">
+            <h3 class="block-title">卦辞</h3>
+            <div class="oracle">
+              <div class="slip">
+                <span class="slip-cord" aria-hidden="true"></span>
+                <div class="poem" id="poem"></div>
+                <span class="slip-seal" id="slip-seal" aria-hidden="true">占</span>
+              </div>
+            </div>
+            <p class="judgement" id="judgement"></p>
+          </section>
+
+          <section class="block reading-block reveal">
+            <h3 class="block-title">解卦 <span class="badge" id="source-badge" hidden></span></h3>
+            <p class="reading-text" id="reading-text"></p>
+            <dl class="reading-tips" id="reading-tips" hidden></dl>
+            <p class="reading-status" id="reading-status" aria-live="polite"></p>
+          </section>
+
+          <section class="block yi-ji reveal">
+            <div class="yi">
+              <h3 class="block-title seal-title"><span>宜</span></h3>
+              <p id="yi">—</p>
+            </div>
+            <div class="ji">
+              <h3 class="block-title seal-title seal-ji"><span>忌</span></h3>
+              <p id="ji">—</p>
+            </div>
+          </section>
+        </div>
+
+        <aside class="col-side">
+          <section class="block six reveal">
+            <h3 class="block-title">六事</h3>
+            <ol id="areas"></ol>
+          </section>
+
+          <section class="block open reveal">
+            <h3 class="block-title">开运</h3>
+            <div class="open-body">
+              <div class="open-compass" id="open-compass" aria-hidden="true"></div>
+              <dl id="open-list"></dl>
+            </div>
+          </section>
+
+        </aside>
+
+          <details class="basis reveal" id="basis">
+            <summary>推演依据与限度</summary>
+            <div id="basis-body" class="basis-body"></div>
+          </details>
+
+        <section class="band hours reveal" aria-labelledby="hours-title">
+          <div class="band-head">
+            <h3 class="block-title" id="hours-title">十二时辰</h3>
+            <p class="band-note">朱砂标出的是起卦时辰</p>
+          </div>
+          <ol id="hours"></ol>
+        </section>
+
+        <section class="band history reveal" aria-labelledby="history-title">
+          <div class="band-head">
+            <h3 class="block-title" id="history-title">近七日</h3>
+            <p class="band-note">点一日，重读那天的卦</p>
+          </div>
+          <ol id="history"></ol>
+        </section>
+      </div>
+
+      <div class="wrap">
+        <p class="reading-footnote" id="reading-footnote"></p>
+      </div>
+    </section>
+
+    <section class="method" aria-labelledby="method-title">
+      <div class="wrap">
+        <header class="method-head reveal">
+          <h2 id="method-title">这一卦是怎么起的</h2>
+          <p class="method-lede">卦不是随机抽的。年月日时四个数定出上下卦与动爻，再与你的四柱、当天的黄历、行运合看。同一日同一时辰，只出一卦。</p>
+        </header>
+
+        <ol class="method-steps">
+          <li class="reveal">
+            <h3>起卦</h3>
+            <p>农历年支数、月、日相加取上卦；再加时辰数取下卦；总和取六爻之地为动爻。依的是梅花易数年月日时法。</p>
+          </li>
+          <li class="reveal">
+            <h3>得卦</h3>
+            <p>六爻自下而上，动爻所在之卦为用，另一卦为体。体用五行生克定大势，再看得出的变卦与互卦。</p>
+          </li>
+          <li class="reveal">
+            <h3>断卦</h3>
+            <p>与四柱喜忌、黄历宜忌、当日行运合参，落到情感、事业、财运、健康、人际、学业六事，最后收成一句可用的话。</p>
+          </li>
+        </ol>
+
+        <div class="plates">
+          <figure class="reveal">
+            <div class="plate-frame">
+              <img src="assets/luopan.webp" width="900" height="1355" alt="清代风水罗盘，木质盘面刻着二十四山与八卦圈层" loading="lazy" decoding="async">
+            </div>
+            <figcaption>风水罗盘 · Wellcome Collection，CC BY 4.0。界面里的罗盘按今日干支重绘，不是这张照片。</figcaption>
+          </figure>
+          <figure class="reveal">
+            <div class="plate-frame">
+              <img src="assets/zhouyi-song.webp" width="760" height="1256" alt="宋刻本周易，王弼注，页面上有朱印" loading="lazy" decoding="async">
+            </div>
+            <figcaption>宋刻本周易 · 公有领域，via Wikimedia Commons。卦名与卦意取自通行本。</figcaption>
+          </figure>
+          <figure class="reveal">
+            <div class="plate-frame">
+              <img src="assets/dunhuang-star.webp" width="900" height="903" alt="敦煌星图，唐代写本，星官以圆点与连线绘出" loading="lazy" decoding="async">
+            </div>
+            <figcaption>敦煌星图 · 公有领域，via Wikimedia Commons。西方占星与月相那一层，来自同一片天。</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ============================================================ 命盘 -->
+  <section class="view" id="view-chart" hidden>
+    <header class="chart-hero">
+      <div class="chart-sky" aria-hidden="true">
+        <div class="chart-orbit" id="chart-orbit"></div>
+        <div class="stars" id="chart-stars"></div>
+        <img class="chart-mountains" src="assets/mountains.jpg" width="1600" height="810" alt="">
+      </div>
+      <div class="wrap chart-hero-inner">
+        <p class="stage-meta">紫微垣下 · 命盘</p>
+        <h1>命盘</h1>
+        <p class="chart-lede" id="chart-lede">—</p>
+        <span class="chart-seal" aria-hidden="true">命</span>
+      </div>
+      <div class="stage-edge" aria-hidden="true">
+        <svg viewBox="0 0 1440 92" preserveAspectRatio="none" focusable="false">
+          <path d="M0,60.0 L14,58.3 L28,58.7 L42,56.1 L56,54.7 L70,87.4 L84,57.5 L98,60.5 L112,58.6 L126,56.5 L140,57.4 L154,58.2 L168,62.0 L182,57.4 L196,89.3 L210,52.9 L224,56.5 L238,57.5 L252,56.2 L266,54.2 L280,58.7 L294,56.6 L308,57.3 L322,54.9 L336,57.7 L350,59.8 L364,55.2 L378,50.5 L392,54.0 L406,51.7 L420,55.4 L434,58.6 L448,61.2 L462,57.8 L476,57.9 L490,59.9 L504,59.9 L518,62.1 L532,62.9 L546,64.6 L560,62.8 L574,65.3 L588,63.3 L602,87.3 L616,60.6 L630,63.3 L644,59.8 L658,79.5 L672,61.4 L686,57.4 L700,52.8 L714,56.9 L728,60.0 L742,61.1 L756,63.2 L770,64.6 L784,65.6 L798,67.9 L812,81.1 L826,68.1 L840,69.6 L854,65.4 L868,61.8 L882,59.5 L896,62.3 L910,60.1 L924,59.6 L938,59.6 L952,59.7 L966,55.5 L980,59.0 L994,55.7 L1008,53.9 L1022,87.3 L1036,48.3 L1050,48.5 L1064,51.9 L1078,47.1 L1092,49.0 L1106,45.2 L1120,44.9 L1134,49.3 L1148,47.3 L1162,44.7 L1176,45.4 L1190,46.9 L1204,45.1 L1218,49.4 L1232,46.0 L1246,45.6 L1260,46.2 L1274,43.4 L1288,40.0 L1302,40.0 L1316,40.0 L1330,42.9 L1344,44.2 L1358,40.0 L1372,40.0 L1386,40.0 L1400,40.0 L1414,40.0 L1428,57.0 L1440,92 L0,92 Z" fill="var(--paper)"/>
+        </svg>
+      </div>
+    </header>
+
+    <div class="wrap chart-page">
+
+      <section class="block chart-block reveal">
+        <div class="block-head">
+          <h2>四柱</h2>
+          <p class="block-note" id="pillars-note"></p>
+        </div>
+        <table class="pillars" id="pillars-table"></table>
+      </section>
+
+      <div class="chart-two">
+        <section class="block chart-block reveal">
+          <h2>五行与喜忌</h2>
+          <div class="wuxing" id="wuxing" role="img" aria-label="五行力量"></div>
+          <p class="chart-text" id="xiyong-text"></p>
+          <dl class="chart-facts" id="chart-facts"></dl>
+          <details class="chart-detail">
+            <summary>旺衰推算细节</summary>
+            <p class="chart-note" id="strength-text"></p>
+          </details>
+        </section>
+
+        <figure class="plate reveal">
+          <img src="assets/luopan.webp" width="900" height="1355" alt="清代风水罗盘，木质盘面刻着二十四山与八卦圈层" loading="lazy" decoding="async">
+          <figcaption>风水罗盘 · Wellcome Collection，CC BY 4.0。盘面圈层与界面里的罗盘同构：二十四山、后天八卦、十二地支。</figcaption>
+        </figure>
+      </div>
+
+      <section class="block chart-block reveal">
+        <div class="block-head">
+          <h2>大运</h2>
+          <p class="block-note" id="dayun-note"></p>
+        </div>
+        <ol class="dayun" id="dayun"></ol>
+      </section>
+
+      <section class="block chart-block reveal">
+        <h2>本命星盘</h2>
+        <div class="astro-two">
+          <div class="astro-col">
+            <h3>行星落座</h3>
+            <table class="planets" id="natal-planets"></table>
+          </div>
+          <div class="astro-col">
+            <h3>主要相位</h3>
+            <ul class="aspect-list" id="natal-aspects"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="block chart-block reveal">
+        <h2>今日行运</h2>
+        <ul class="transit-list" id="transits"></ul>
+      </section>
+
+      <section class="block chart-block reveal source-block">
+        <div class="source-copy">
+          <h2>依据与限度</h2>
+          <p>历算、八字、黄历与西洋占星都在本机计算，算法经过天文基准与外部锚点校核：太阳黄经归零误差小于百万分之一度，月亮位置与 Meeus 例 47.a 相差 0.007°，日柱干支四个锚点全部命中。</p>
+          <p>已知限度：节气时刻与天文年历可能相差 1–12 分钟；二十八宿值日、福神方位、晚子时等存在流派差异；旺衰喜用的权重属当代教学体系，不同流派会得出不同结论。它是一个自洽的参照系，不是事实断言。</p>
+          <p class="chart-note">本地引擎路径：<span id="engine-path">—</span></p>
+        </div>
+        <figure class="plate small">
+          <img src="assets/zhouyi-song.webp" width="760" height="1256" alt="宋刻本周易，王弼注，页面上有朱印" loading="lazy" decoding="async">
+          <figcaption>宋刻本周易 · 公有领域，via Wikimedia Commons</figcaption>
+        </figure>
+      </section>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-sky" aria-hidden="true">
+    <div class="stars" id="footer-stars"></div>
+    <img class="footer-mountains" src="assets/mountains.jpg" width="1600" height="810" alt="">
+  </div>
+  <div class="footer-edge" aria-hidden="true">
+    <svg viewBox="0 0 1440 64" preserveAspectRatio="none" focusable="false">
+      <path d="M0,0 L1440,0 L1440,15.0 L1414,6.0 L1400,7.3 L1386,8.7 L1372,7.7 L1358,6.0 L1344,6.0 L1330,6.3 L1316,6.0 L1302,6.0 L1288,6.0 L1274,8.8 L1260,6.0 L1246,6.0 L1232,6.0 L1218,6.2 L1204,7.8 L1190,7.6 L1176,7.6 L1162,8.7 L1148,9.5 L1134,6.8 L1120,6.0 L1106,9.1 L1092,8.7 L1078,7.8 L1064,10.8 L1050,11.4 L1036,9.8 L1022,6.8 L1008,10.0 L994,11.6 L980,8.2 L966,6.0 L952,6.2 L938,6.0 L924,8.8 L910,7.0 L896,7.9 L882,38.3 L868,10.6 L854,14.1 L840,12.6 L826,12.9 L812,39.2 L798,14.1 L784,17.2 L770,16.4 L756,33.6 L742,16.1 L728,14.7 L714,14.1 L700,38.9 L686,16.7 L672,18.0 L658,18.1 L644,20.5 L630,19.5 L616,22.0 L602,25.6 L588,24.8 L574,21.7 L560,22.0 L546,22.8 L532,23.3 L518,26.8 L504,27.5 L490,29.1 L476,27.9 L462,26.9 L448,28.6 L434,25.8 L420,40.9 L406,21.3 L392,21.2 L378,19.4 L364,23.3 L350,22.9 L336,26.5 L322,24.1 L308,24.0 L294,22.5 L280,20.6 L266,19.5 L252,22.2 L238,21.5 L224,25.0 L210,28.8 L196,26.3 L182,23.6 L168,26.9 L154,30.0 L140,27.7 L126,30.0 L112,29.5 L98,27.1 L84,45.5 L70,22.7 L56,20.2 L42,21.4 L28,18.1 L14,20.7 L0,18.0 L0,18.0 Z" fill="var(--ink)"/>
+    </svg>
+  </div>
+  <div class="wrap footer-inner">
+    <p class="footer-brand">每日一卦</p>
+    <p class="footer-disclaimer">依据传统四柱八字、黄历择日与梅花易数起卦，属传统文化与自我参照用途，不构成医疗、投资、法律、婚恋等任何专业建议。命理存在流派差异与主观成分，请理性看待。</p>
+    <p class="footer-meta" id="footer-meta">本地运行 · 数据不出本机</p>
+    <p class="footer-sign">夜观星盘 · 晨读卦签</p>
+    <p class="footer-credits">图片：<a href="https://commons.wikimedia.org/wiki/File:Feng_shui_geometric_compass_Wellcome_L0045144.jpg" rel="noopener">风水罗盘</a>（Wellcome Collection，CC BY 4.0）；<a href="https://commons.wikimedia.org/wiki/File:I_Ching_Song_Dynasty_print.jpg" rel="noopener">宋刻本周易</a>（公有领域）；<a href="https://commons.wikimedia.org/wiki/File:Dunhuang_star_map.jpg" rel="noopener">敦煌星图</a>（公有领域）；<a href="https://commons.wikimedia.org/wiki/File:%E5%8D%97%E5%AE%8B_%E7%B1%B3%E5%8F%8B%E4%BB%81_%E9%9B%B2%E5%B1%B1%E5%9C%96_%E5%8D%B7.jpg" rel="noopener">米友仁雲山圖</a>（CC0）。均来自 Wikimedia Commons。</p>
+  </div>
+</footer>
+
+<dialog class="settings" id="settings" aria-labelledby="settings-title">
+  <form method="dialog" id="settings-form" novalidate>
+    <header class="settings-head">
+      <h2 id="settings-title">设置</h2>
+      <button class="icon-btn" type="button" id="close-settings" aria-label="关闭设置">×</button>
+    </header>
+
+    <div class="settings-body">
+      <section class="settings-section">
+        <h3>解卦接口</h3>
+        <p class="field-hint">兼容 OpenAI 协议的服务，默认填 DeepSeek。Key 只保存在本机浏览器或桌面版本地存储（localStorage），请求只发往你填的地址；本应用不会把它写到文件里。</p>
+        <label class="field">接口地址
+          <input id="api-base" name="api-base" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://api.deepseek.com/v1">
+        </label>
+        <label class="field">API Key
+          <span class="key-row">
+            <input id="api-key" name="api-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-…">
+            <button class="ghost-btn tiny" type="button" id="toggle-key" aria-pressed="false">显示</button>
+          </span>
+        </label>
+        <label class="field">模型
+          <input id="api-model" name="api-model" type="text" autocomplete="off" spellcheck="false" placeholder="deepseek-chat">
+        </label>
+        <div class="inline-row">
+          <button class="ghost-btn" type="button" id="test-api">测试连接</button>
+          <span class="field-status" id="api-status" aria-live="polite"></span>
+        </div>
+      </section>
+
+      <section class="settings-section">
+        <h3>出生资料</h3>
+        <p class="field-hint">公历出生时间。经度用于真太阳时与上升点，不确定就保持上海。</p>
+        <div class="field-row">
+          <label class="field">出生日期
+            <input id="p-date" name="p-date" type="date" required>
+          </label>
+          <label class="field">出生时间
+            <input id="p-time" name="p-time" type="time" required>
+          </label>
+        </div>
+        <div class="field-row">
+          <label class="field">性别
+            <select id="p-gender" name="p-gender">
+              <option value="男">男</option>
+              <option value="女">女</option>
+            </select>
+          </label>
+          <label class="field">称呼
+            <input id="p-name" name="p-name" type="text" maxlength="16" placeholder="命主">
+          </label>
+        </div>
+        <label class="field">出生地
+          <input id="p-place" name="p-place" type="text" maxlength="24" placeholder="上海">
+        </label>
+        <div class="field-row">
+          <label class="field">经度（东经为正）
+            <input id="p-lon" name="p-lon" type="number" step="0.01" min="-180" max="180">
+          </label>
+          <label class="field">纬度（北纬为正）
+            <input id="p-lat" name="p-lat" type="number" step="0.01" min="-90" max="90">
+          </label>
+        </div>
+      </section>
+
+      <section class="settings-section">
+        <h3>今日</h3>
+        <div class="inline-row">
+          <button class="ghost-btn" type="button" id="reset-cast">重新起卦</button>
+          <span class="field-status" id="cast-note"></span>
+        </div>
+        <p class="field-hint">一日起一卦，卦象会记在本机。重新起卦会用当下的时辰换一卦，原来的今日卦被替换。</p>
+      </section>
+    </div>
+
+    <footer class="settings-actions">
+      <button class="ghost-btn" type="button" id="cancel-settings">取消</button>
+      <button class="seal-btn small" type="submit" id="save-settings">保存</button>
+    </footer>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<noscript><p class="wrap noscript">这个应用需要 JavaScript 才能起卦与排盘。</p></noscript>
+<script src="app.js"></script>
+</body>
+</html>
